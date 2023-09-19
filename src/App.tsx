@@ -4,15 +4,16 @@ import './App.css'
 const App = () => {
   const defaultTitle = 'React';
   const [title, setTitle] = useState(defaultTitle);
-  const formatTitle = (text) => text == '' ? defaultTitle : `${text} 😉`;
-  const changeTitle = text => {
+  const formatTitle = (text: string) => text == '' ? defaultTitle : `${text} 😉`;
+  const changeTitle = (text: string) => {
     setTitle(formatTitle(text));
   }
 
   // Option 1 set text in real time
-  const handleChange = event => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     changeTitle(event.target.value);
   }
+  
   const getOption1 = () => <div>
       <h1>Hello {title}</h1>
       <label htmlFor="name">What is your name?</label><br/>
@@ -20,9 +21,14 @@ const App = () => {
     </div>
 
   // Option 2 js object destructuring
-  const getWelcome = (text) => { return {greeting : 'Hey', title : text};}
+  interface Welcome {
+    greeting: string;
+    title: string;
+  }
+
+  const getWelcome = (text: string) => { return {greeting : 'Hey', title : text};}
   const welcome = getWelcome(title)
-  const Title = ({greeting, title}) => <h1>{greeting} {title}</h1>
+  const Title = ({greeting, title}: Welcome, key: number) => <h1 key={key}>{greeting} {title}</h1>
   const getOption2 = () => <div>
       <Title {...welcome} />
       <label htmlFor="name">What is your name?</label><br/>
@@ -30,9 +36,13 @@ const App = () => {
     </div>
 
   // Option 3 set text on enter
-  const submitForm = event => {
+  interface WelcomeFormElements extends HTMLCollection {
+    name: HTMLInputElement;
+  }
+  const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    changeTitle(event.target.name.value);
+    const elements: WelcomeFormElements = event.currentTarget.elements as WelcomeFormElements;
+    changeTitle(elements.name.value);
   }
   const getOption3 = () => <div>
       <Title {...welcome} />
@@ -45,10 +55,11 @@ const App = () => {
   // Option 4 js map 
   const [list, setList] = useState([welcome]);
 
-  const Titles = () => list.map((text) => <Title {...text} />);
-  const submitTitle = event => {
+  const Titles = () => list.map((text, index) => <Title {...text} key={index} />);
+  const submitTitle = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setList([...list, getWelcome(formatTitle(event.target.name.value))])
+    const elements: WelcomeFormElements = event.currentTarget.elements as WelcomeFormElements;
+    setList([...list, getWelcome(formatTitle(elements.name.value))])
   }
 
   const getOption4 = () => <div>
@@ -59,7 +70,7 @@ const App = () => {
       <Titles/>
     </div>
 
-  return (getOption4());
+  return (getOption1());
 }
 
 export default App
