@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 interface Framework {
     title: string,
     url: string,
@@ -41,19 +39,15 @@ const DescriptionParsed = (item: Object) => {
     )
 }
 
-const Description = (item: Framework) => {
-    return ( 
+const Description = (item: Framework) => 
         <div>
             <span><a href={item.url}>{item.title}</a></span>
             <span>{item.author}</span>
             <span>{item.num_comments}</span>
             <span>{item.points}</span>
         </div>
-    )
-}
 
-const ReactLists = () => {
-    return (
+const List = () => 
         <div>
             <ul>
                 {list.map(i => 
@@ -63,7 +57,5 @@ const ReactLists = () => {
                 }
             </ul>
         </div>
-    );
-}
 
-export default ReactLists
+export default List

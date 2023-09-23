@@ -1,9 +1,13 @@
 import HelloReact from './HelloReact'
-import ReactLists from './ReactLists';
+import List from './ReactLists';
 import './App.css'
 
-const App = () => {
-  return ReactLists();
-}
+const App = () => 
+  <div>
+    <HelloReact/>
+    <hr />
+    <List/>
+  </div>
+
 
 export default App
