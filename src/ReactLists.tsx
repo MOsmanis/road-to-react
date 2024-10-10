@@ -1,4 +1,4 @@
-interface Framework {
+export interface Story {
     title: string,
     url: string,
     author: string,
@@ -7,55 +7,48 @@ interface Framework {
     id: number,
 }
 
-const list : Framework[] = [
-    {
-        title: 'React',
-        url: 'https://reactjs.org/',
-        author: 'Jordan Walke',
-        num_comments: 3,
-        points: 4,
-        id: 0,
-    },
-    {
-        title: 'Redux',
-        url: 'https://redux.js.org/',
-        author: 'Dan Abramov, Andrew Clark',
-        num_comments: 2,
-        points: 5,
-        id: 1,
-    }
-]
-
-const DescriptionParsed = (item: Object) => {
-    const props : string[] = Object.keys(item);
-    return ( <div>
-                {props.map(p => 
-                    <div>
-                        <label htmlFor={p}>{`${p} :`}</label>
-                        <span id={p} key={p}>{(item as any)[p]}</span>
-                    </div>
-                )} 
-            </div>
-    )
+interface ListProps {
+    list: Story[],
 }
 
-const Description = (item: Framework) => 
-        <div>
-            <span><a href={item.url}>{item.title}</a></span>
-            <span>{item.author}</span>
-            <span>{item.num_comments}</span>
-            <span>{item.points}</span>
-        </div>
+interface ItemProps {
+    story: Story,
+}
+// Different approach for learning
+//
+// const DescriptionParsed = (item: Object) => {
+//     const props : string[] = Object.keys(item);
+//     return ( <div>
+//                 {props.map(p => 
+//                     <div>
+//                         <label htmlFor={p}>{`${p} :`}</label>
+//                         <span id={p} key={p}>{(item as any)[p]}</span>
+//                     </div>
+//                 )} 
+//             </div>
+//     )
+// }
 
-const List = () => 
-        <div>
+
+const StoryItem = (props: ItemProps) =>
+
+    <li key={props.story.id}>
+             <div>
+            <span><a href={props.story.url}>{props.story.title}</a></span>
+            <span>{props.story.author}</span>
+            <span>{props.story.num_comments}</span>
+            <span>{props.story.points}</span>
+        </div>
+    </li>
+
+const List = (props: ListProps) => {
+    console.log("list render")
+        return (<div>
             <ul>
-                {list.map(i => 
-                    <li key={i.id}>
-                        <Description {...i}/>
-                    </li>)
+                {props.list.map(i => <StoryItem story={i}/>)
                 }
             </ul>
-        </div>
+        </div>);
+};
 
 export default List
