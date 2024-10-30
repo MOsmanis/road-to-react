@@ -1,15 +1,24 @@
-import Search from './Search.tsx';
+import InputWithLabel from './InputWithLabel.tsx';
 import List, { Story } from './ReactLists.tsx';
 import './App.css'
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 
-const [searchText, setSearchText] = useState('React');
+const useStorageState = (initialState: any, key: any) => {
+  const [value, setValue] = useState((localStorage.getItem(key) ?? initialState));
+  useEffect(() => {localStorage.setItem(key, value)}, [value, key]);
 
-const handleSearch = (event: React.FormEvent<HTMLInputElement>) => {
-  setSearchText(event.currentTarget.value);
+  return [value, setValue];
 }
 
 const App = () => {
+// useState((localStorage.getItem('search') ?? 'React'));
+  const [searchText, setSearchText] = useStorageState('React', 'search');
+
+  const handleSearch = (event: React.FormEvent<HTMLInputElement>) => {
+    const value = event.currentTarget.value;
+    setSearchText(value);
+  }
+
   const stories: Story[] = [
     {
         title: 'React',
@@ -32,11 +41,11 @@ const App = () => {
 const filteredStories = stories.filter((s: Story) => s.title.toLowerCase().includes(searchText.toLowerCase()));
 
   return (
-  <div>
-    <Search search={searchText} onSearch={handleSearch}/>
+  <>
+    <InputWithLabel key="search" isFocused value={searchText} onInputChange={handleSearch}><strong>Search:</strong></InputWithLabel>
     <hr />
     <List list={filteredStories}/>
-  </div>);
+  </>);
 }
 
 export default App
